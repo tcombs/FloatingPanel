@@ -225,6 +225,21 @@ open class FloatingPanelController: UIViewController {
         }
     }
 
+    /// [Experimental] Allows scrolling content of the tracking scroll view above the specified state.
+    ///
+    /// The default value is the most-expanded(largest) state, which is a largest one of the raw values of states
+    /// specified in the `layout`  object. For example, given full, half and tip states in a layout and this property
+    /// is set to the half state, it allows scrolling content of the tracking scroll view in both of the full and half states..
+    @objc
+    public var smallestStateAllowedScrollingContent: FloatingPanelState {
+        set {
+            floatingPanel.layoutAdapter.smallestStateAllowedScrollingContent = newValue
+        }
+        get {
+            floatingPanel.layoutAdapter.smallestStateAllowedScrollingContent
+        }
+    }
+
     private var _contentViewController: UIViewController?
 
     private(set) var floatingPanel: Core!

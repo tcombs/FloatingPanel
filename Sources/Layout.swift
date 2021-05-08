@@ -261,14 +261,8 @@ class LayoutAdapter {
         }
     }
 
-    var offsetFromMostExpandedAnchor: CGFloat {
-        switch position {
-        case .top, .left:
-            return edgePosition(surfaceView.presentationFrame) - position(for: mostExpandedState)
-        case .bottom, .right:
-            return position(for: mostExpandedState) - edgePosition(surfaceView.presentationFrame)
-        }
-    }
+    // See `FloatingPanelController.smallestStateAllowedScrollingContent` for details.
+    lazy var smallestStateAllowedScrollingContent = self.mostExpandedState
 
     private var hiddenAnchor: FloatingPanelLayoutAnchoring {
         switch position {
@@ -812,6 +806,30 @@ extension LayoutAdapter {
         default:
             return LayoutSegment(lower: sortedStates[sortedStates.endIndex - 1], upper: nil)
         }
+    }
+}
+
+// Scroll tracking utilities for Core.
+extension LayoutAdapter {
+    var offsetFromMostExpandedAnchor: CGFloat {
+        offsetFromAnchor(for:  mostExpandedState)
+    }
+
+    func offsetFromAnchor(for state: FloatingPanelState) -> CGFloat {
+        switch position {
+        case .top, .left:
+            return edgePosition(surfaceView.presentationFrame) - position(for: state)
+        case .bottom, .right:
+            return position(for: state) - edgePosition(surfaceView.presentationFrame)
+        }
+    }
+
+    func isScrollActiveState(_ state: FloatingPanelState) -> Bool {
+        if let threshold = sortedAnchorStates.firstIndex(of: smallestStateAllowedScrollingContent),
+           let index = sortedAnchorStates.firstIndex(of: state) {
+            return threshold <= index
+        }
+        return state == mostExpandedState
     }
 }
 
