@@ -406,7 +406,7 @@ class Core: NSObject, UIGestureRecognizerDelegate {
                         log.debug("settle offset --", value(of: initialScrollOffset))
                         stopScrolling(at: initialScrollOffset)
                     } else {
-                        if surfaceView.grabberAreaContains(location) {
+                        if surfaceView.grabberAreaContains(initialLocation) {
                             // Preserve the current content offset in moving from full.
                             stopScrolling(at: initialScrollOffset)
                         }
